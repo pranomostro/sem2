@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>VHDL</title>
+  </head>
+
+
+  <body>
+    <h1>3.15 Lampensteuerung - Parallel-Seriell-Umsetzer der Zentrale</h1>
+
+
+    Es ist eine Lampensteuerung f&uuml;r 128 * 128 Lampen zu entwickeln.<br>
+    <br>
+    Die Lampen sind hierbei strangweise zu 128 Str&auml;ngen mit je 128 Lampen zusammengefasst.<br>
+    <img src="3.10.1.png" border="0">
+    </center>
+
+    <center>
+    <img src="3.10.11.png" border="0">
+    </center>
+    <br>
+    Eine Zentrale besitzt einen Speicher, der &uuml;ber die serielle Leitung zu einem Rechner von diesem geladen werden kann. Gleichzeitig soll der Inhalt des Speichers von der Zentrale abgefragt werden k&ouml;nnen und an die einzelnen Str&auml;nge und somit Lampen weitergegeben werden. <br>
+    <br>
+    Aus organisatorischen Gr&uuml;nden wird der Speicher in einen Strangteil, 7 Bit Adresse, und in einen Lampenteil, ebenfalls 7 Bit Adresse aufgeteilt. Die Speicherbreite einer Adresse ist ein Bit. <br>
+    <br>
+
+
+    <br>
+    <center>
+    <img src="3.10.2.png" border="0">
+    </center>
+    <br>
+
+
+    Die Daten werden vom Rechner in serieller Form geliefert. Das &Uuml;bertragungsprotokoll sieht hierbei wie folgt aus: <br>
+    <br>
+
+
+    <br>
+    <center>
+    <img src="3.10.3.png" border="0">
+    </center>
+    <br>
+
+
+    <br>
+    Die &Uuml;bertragung besteht aus einer Start-Kombination, bestehend aus einem 2 Taktzyklen breitem HIGH-Zustand, gefolgt von einem 2 Taktzyklen breitem LOW-Zustand. Anschliessend folgen immer 8 Bit Daten. Die Stopp-Kombination besteht aus einem 2 Taktzyklen breitem LOW-Zustand, gefolgt von einem 2 Taktzyklen breitem HIGH-Zustand. Die Daten werden mit 9600 Baud &uuml;bertragen. <br>
+    <br>
+    Zunaechst wird immer die Strangadresse &uuml;bertragen. Diese besteht aus den Daten D1 bis D7. D0 wird hierbei nicht ber&uuml;cksichtigt. Die Lampenansteurungsadresse wird als zweites &uuml;bertragen, wobei das Datum D0 die Information enth&auml;lt, ob der Inhalt der Speicherzelle eine 1 oder eine 0 sein soll. <br>
+    <br>
+    Nach der &Uuml;bertragung von zwei Daten wird durch die Seriell-Parallelumsetzung ein Fertigsignal (F) erzeugt, dass der Speichersteuerung anzeigt, dass ein abspeicherbares Datum vorliegt. <br>
+    <br>
+    Die Seriell-Parallelumsetzung hat hierbei die Adressen nach Strang und Lampenansteuerung unterschieden, nur das zu speichernde Datum ist noch durch die Speichersteuerung heraus zu filtern. <br>
+    <br>
+    Die Speichersteuerung &uuml;bernimmt nun die Daten, isoliert das zu speichernde Datum, legt die Adressen an und erzeugt einen Schreibimpuls f&uuml;r den Speicher. W&auml;hrend dieser Phase ist die Parallel-Seriell-Umsetzung f&uuml;r die &Uuml;bernahme von Daten aus dem Speicher durch das Signal S zu sperren. <br>
+    <br>
+    Nach der Durchf&uuml;hrung des Schreibvorgangs schaltet die Speichersteuerung wieder auf die Adressen der Speicheranwahl um. <br>
+    <br>
+    Die Speicheranwahl erzeugt die Spalten- und Lampenadressen und legt sie &uuml;ber die Speicheransteuerung an den Speicher an. Gleichzeitig gibt sie die Adressen auch an die Parallel-Seriell-Umsetzung weiter. Getaktet wird die Speicheranwahl durch die Bussteuerung. Ferner wird durch das Anlegen eines externen Signals (nicht eingezeichnet) unabh&auml;ngig vom Speicheradresszustand die Licht-Aus-Kombination f&uuml;r die Lampenansteuerung angelegt, mit einem zweiten externen Signal die Kombination f&uuml;r Licht-An. (s. auch Lampenansteuerung) <br>
+    <br>
+    Die Bussteuerung erzeugt einen Taktzyklus f&uuml;r die &Uuml;bertragungsrate von 9600 Baud und gibt diesen an die Parallel-Seriell-Umsetzung weiter. Nach dem Durchlaufen von zwei &Uuml;bertragungszyklen (Strang- und Lampenansteuerung) wird ein Takt an die Speicheradresse weitergeleitet. <br>
+    <br>
+    Die Parallel-Seriell-Umsetzung erzeugt einen seriellen Code f&uuml;r die Strangansteuerungen und einen seriellen Code f&uuml;r die Lampenansteuerungen. Das &Uuml;bertragungsprotokoll ist identsich mit dem oben beschriebenem &Uuml;bertragungsprotokoll. Auf die Strangleitungen wird hierbei die Strangadresse gelegt, auf die Lampenansteuerungen deren Adressen. Der &Uuml;bertragungstakt wird von der Bussteuerung geliefert. <br>
+    <br>
+    Um Leitungen zu sparen, wird bei jedem Strang eine Strangansteuerung angebracht. Diese hat die Aufgabe, falls die g&uuml;ltige Strangadresse anliegt, das Ergebnis zwischenzuspeichern und die Information f&uuml;r die angeschlossenen Lampenansteuerungen freizugeben. Hierbei wird die g&uuml;ltige Strangadresse durch angelegte Schalter eingestellt und mit der ankommenden Information verglichen. Stimmt die Adresse &uuml;berein, so ist ein Flip-Flop zu setzen und der Lampenansteuerungstrang durchzuschalten. Stimmt die Adresse nicht &uuml;berein, so ist das Flip-Flop zur&uuml;ck zu setzen. <br>
+    <br>
+
+
+    <br>
+    <center>
+      <img src="3.10.4.png" border="0"><br>
+      Strangansteuerung
+    </center>
+    <br>
+
+
+    <br>
+    Aus denselben Gr&uuml;nden wie bei der Strangansteuerung wird bei jeder Lampe eine Lampenansteuerung installiert. Diese empf&auml;ngt seriell ein 8 Bit breites Datum, parallelisiert dieses, f&uuml;hrt die h&ouml;herwertigen sieben Bits einem Komparator zu und vergleicht es mit einer hardwareseitig eingestellten 7 Bit breiten Adresse. Sind die beiden Daten gleich, so wird ein Flip-Flop gesetzt, falls das niederwertige Bit eine 1 aufweist. Falls diese Bit eine 0 aufweist, so ist das Flip-Flop auf 0 zu setzen. <br>
+    <br>
+    Sind die 7 h&ouml;herwertigen Bits eine 0 und das niederwertige Bit ebenfalls eine 0, so sind alle Flip-Flops des Strangs auf 0 zu setzen (Licht-Aus-Modus). Ist dagegen das niederwertige Bit eine 1, so sind alle Flip-Flop des Strangs auf 1 zu setzen (Licht-An-Modus). <br>
+
+
+    <br>
+    <center>
+      <img src="3.10.5.png" border="0"><br>
+      Lampenansteuerung
+    </center>
+    <br>
+
+
+    <hr>
+    <address><a href="mailto:czornack@in.tum.de">Jantho</a></address>
+<!-- Created: Mon Oct 21 16:34:12 Westeuropäische Sommerzeit 2002 -->
+<!-- hhmts start -->
+Last modified: Mon Nov 04 13:54:10 Westeurop&auml;ische Normalzeit 2002
+<!-- hhmts end -->
+  </body>
+</html>

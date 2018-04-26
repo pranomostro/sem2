@@ -1,4 +1,3 @@
-
 /**
  * Die Klasse BinSea stellt Methoden bereit, in sortierten Feldern binär
  * nach Wertebereichen zu suchen.
@@ -31,6 +30,10 @@ class BinSea {
     /**
      * Todo: Aufgabe a)
      */
+	if(!lower&&sortedData[0]>value)
+		return -1;
+	if(lower&&sortedData[sortedData.length-1]<value)
+		return -1;
   }
 
   /**
