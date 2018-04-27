@@ -34,6 +34,19 @@ class BinSea {
 		return -1;
 	if(lower&&sortedData[sortedData.length-1]<value)
 		return -1;
+
+	int hi, lo, mid;
+	lo=0;
+	hi=sortedData.length-1;
+
+	while(lo<=hi) {
+		mid=(hi+lo)/2;
+		if(sortedData[mid]>value)
+			hi=mid-1;
+		else if(sortedData[mid]<value)
+			lo=mid+1;
+	}
+	return mid;
   }
 
   /**
