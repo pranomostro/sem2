@@ -27,16 +27,11 @@ class BinSea {
    * @return der passende Index, -1 wenn dieser nicht gefunden werden kann
    */
   private static int search (int[] sortedData, int value, boolean lower) {
-    /**
-     * Todo: Aufgabe a)
-     */
-	if(!lower&&sortedData[0]>value)
-		return -1;
-	if(lower&&sortedData[sortedData.length-1]<value)
+	if(!lower&&sortedData[0]>value||lower&&sortedData[sortedData.length-1]<value||sortedData.length==0)
 		return -1;
 
 	int hi, lo, mid;
-	lo=0;
+	lo=mid=0;
 	hi=sortedData.length-1;
 
 	while(lo<=hi) {
@@ -45,6 +40,13 @@ class BinSea {
 			hi=mid-1;
 		else if(sortedData[mid]<value)
 			lo=mid+1;
+		else
+			break;
+	}
+	if(lower&&sortedData[mid]<value) {
+		return mid+1;
+	} else if(!lower&&sortedData[mid]>value) {
+		return mid-1;
 	}
 	return mid;
   }
@@ -71,6 +73,13 @@ class BinSea {
     /**
      * Todo: Aufgabe b)
      */
+	int lb=search(sortedData, valueRange.getFrom(), true);
+	int ub=search(sortedData, valueRange.getTo(), false);
+	return new NonEmptyInterval(lb, ub);
   }
 
+  public static void main(String[] args) {
+	int[] testarray={-10, 33, 50, 99, 123, 4242};
+	System.out.println("" + search(testarray, new NonEmptyInterval(-20, 124)));
+  }
 }
