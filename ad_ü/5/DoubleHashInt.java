@@ -45,5 +45,4 @@ public class DoubleHashInt implements DoubleHashable<Integer> {
      * Todo
      */
   }
-
 }
