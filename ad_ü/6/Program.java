@@ -10,34 +10,33 @@ public class Program {
 		// int n = 1000;
 		// int n = 10000;
 		// int n = 100000;
-		// int n = 1000000;
-		int n = 10000000;
+		int n = 1000000;
+		// int n = 10000000;
 
-		// TODO: Zahlen für den Vergleich vorbereiten
 		Random r = new Random();
 		int[] numbers = new int[n];
 		for (int i = 0; i < n; i++) {
 			// Mit zufälligen Zahlen initialisieren
-			//numbers[i] = r.nextInt(n);
+			numbers[i] = r.nextInt(n);
 
 			// Mit bereits sortierten Zahlen initialisieren
-			if(i==0)
-				numbers[i]=r.nextInt(n);
-			else
-				numbers[i]=numbers[i-1]+r.nextInt(n);
+			//if(i==0)
+			//	numbers[i]=r.nextInt(n);
+			//else
+			//	numbers[i]=numbers[i-1]+r.nextInt(Integer.MAX_VALUE/n);
 
 			// Mit invers sortierten Zahlen initialisieren
 			//if(i==0)
 			//	numbers[n-1-i]=r.nextInt(n);
 			//else
-			//	numbers[n-1-i]=numbers[n-i]+r.nextInt(n);
+			//	numbers[n-1-i]=numbers[n-i]+r.nextInt(Integer.MAX_VALUE/n);
 		}
 
 		printArray("vorher: ", numbers);
 
 		LinkedList<SortingBase> implementations = new LinkedList<SortingBase>();
 		implementations.add(new Quicksort());
-		// TODO: Hier alle Implementierungen hinzufügen
+		implementations.add(new Mergesort());
 
 		for (SortingBase sorter : implementations) {
 			int[] numbersImpl = Arrays.copyOf(numbers, n);
