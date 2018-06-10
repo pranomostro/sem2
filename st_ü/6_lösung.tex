@@ -42,4 +42,26 @@ UnregisteredWebuser & getInfo() & \guillemotleft create\guillemotright & x & x &
 
 \section*{3}
 
+\section*{4}
+
+\includegraphics[width=15cm]{dg2.png}
+
+In this model one uses the Strategy Pattern to model the different
+encryption methods. The encryption method used is determined by the
+setEncryption() method in the Policy class, using the DES algorithm
+with 56 bit for legacy systems with necessary backwards compability, and
+AES encryption of different strengths for different levels of security
+and speed (systems with less secure encryption use smaller key sizes,
+systems with bigger security requirements use longer key sizes).
+Every encryption request is routed through a Context, which calls
+the selectAlgorithm() method, which in turn uses the Policy class.
+
+\section*{5}
+
+Inheritance copies all methods and attributes from one class to a new
+class and then extends this class (possibly overwriting existing methods
+and attributes). It uses specified functionality from the parent class.
+Delegation calls a method from a foreign class, it uses already
+implemented functionality.
+
 \end{document}
