@@ -3,14 +3,19 @@ import java.util.Scanner;
 
 public class RadixchenTest {
 	public static void main(String[] args) {
-		//Scanner scanner = new Scanner(System.in);
+		Integer n;
+		Scanner scanner = new Scanner(System.in);
+		ArrayList<Integer> nums=new ArrayList<Integer>();
 
-		//while (scanner.hasNextInt()) {
-			// TODO: Eingabe in einer Liste speichern.
-		//}
+		while (scanner.hasNextInt()) {
+			n=scanner.nextInt();
+			if(n<0)
+				System.exit(0);
+			nums.add(n);
+		}
 
-		// TODO: eingegebene Liste per RadixSort sortieren und zeilenweise ausgeben.
-		Integer[] testarr={41, 73, 98, 36, 93, 48, 39, 226, 10054, 19, 5, 22, 85, 37, 33, 34, 52, 82, 74, 44, 70, 55};
+		Integer[] testarr=nums.toArray(new Integer[nums.size()]);
+
 		RadixSort.sort(testarr);
 
 		for(int i=0; i<testarr.length; i++)
