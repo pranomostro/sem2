@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.ArrayDeque;
 
 public class BinomialHeap {
 	private ArrayList<BinomialTreeNode> list;
@@ -31,21 +32,17 @@ public class BinomialHeap {
 	 * @param key der einzufügende Schlüssel
 	 */
 	public void insert(int key) {
-		System.out.println("-----------------Begin of insert()");
-		System.out.println("Adding new node with value " + key);
 		BinomialTreeNode tn, nn=new BinomialTreeNode(key);
 		list.add(nn);
 		System.out.println("" + list.size());
 		for(int i=list.size()-1; i>=1&&list.get(i).rank()==list.get(i-1).rank(); i--) {
-			System.out.println("Checking for element " + i + " and " + (i-1));
 			tn=list.get(i).merge(list.get(i), list.get(i-1));
 			list.remove(i);
 			list.remove(i-1);
 			list.add(tn);
 		}
 		for(int i=0; i<list.size(); i++)
-			System.out.println("Tree with min " + list.get(i).min() + " and rank " + list.get(i).rank());
-		System.out.println("------------------End of insert()");
+			;
 	}
 
 	/**
@@ -55,7 +52,7 @@ public class BinomialHeap {
 	 * @return das minimale Element
 	 */
 	public int deleteMin() {
-		int i, min, minindex;
+		int i, j, k, min, minindex;
 
 		/* find the minimum tree in the current heap */
 
@@ -67,6 +64,21 @@ public class BinomialHeap {
 		min=list.get(i).min();
 		BinomialTreeNode[] new_nodes=list.get(i).deleteMin();
 		list.remove(i);
+
+		/* Convert the BinomialTreeNode array into an ArrayList, */
+		/* then produce a new ArrayList that is "the sum" of */
+		/* new_nodes and list, and then assign this new ArrayList */
+		/* to list */
+
+		BinomialTreeNode cy;
+		ArrayDeque<BinomialTreeNode> nl=new ArrayQeue<BinomialTreeNode>();
+		for(i=children.size()-1, j=new_nodes.size()-1; k=0; i>0||j>0;) {
+			nl.add();
+			if(children.get(i).rank()==new_nodes.get(i).rank()) {
+			} else if(children.get(i).rank()<new_nodes.get(i).rank()) {
+			} else {
+			}
+		}
 
 		return min;
 	}
