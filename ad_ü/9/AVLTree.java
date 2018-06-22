@@ -24,7 +24,9 @@ public class AVLTree {
 	 * @return 'true' falls der Baum ein valider AVL-Baum ist, 'false' sonst
 	 */
 	public boolean validAVL() {
-		// TODO...
+		if(root!=null)
+			return root.validAVL();
+		return true;
 	}
 
 	/**
@@ -33,7 +35,13 @@ public class AVLTree {
 	 * @param key der einzufügende Schlüssel
 	 */
 	public void insert(int key) {
-		// TODO...
+		if(root==null) {
+			root=new AVLTreeNode(key);
+			return;
+		}
+		if(find(key))
+			return;
+		root.insert(key);
 	}
 
 	/**
@@ -43,7 +51,7 @@ public class AVLTree {
 	 * @return 'true', falls der Schlüssel gefunden wurde, 'false' sonst
 	 */
 	public boolean find(int key) {
-		// TODO...
+		return root.find(key);
 	}
 
 	/**
