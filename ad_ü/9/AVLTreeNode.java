@@ -26,10 +26,14 @@ public class AVLTreeNode {
 	public void updateBalance() {
 		int hl, hr;
 		hl=hr=0;
-		if(left!=null)
+		if(left!=null) {
 			hl=1+left.height();
-		if(right!=null)
+			left.updateBalance();
+		}
+		if(right!=null) {
 			hr=1+right.height();
+			right.updateBalance();
+		}
 		balance=hr-hl;
 	}
 
@@ -116,26 +120,18 @@ public class AVLTreeNode {
 		}
 		/* now go forth and rotate! */
 		updateBalance();
-		System.err.println("Now rotating the tree after inserting " + key + " with the balance " + balance);
 		if(balance==2) {
-			if(right.balance<0) {
-				System.err.println("Double-rotating left");
+			if(right.balance<0)
 				right.rotateRight();
-			} else
-				System.err.println("Single-rotating left");
 			rotateLeft();
 		} else if(balance==-2) {
-			if(left.balance>0) {
-				System.err.println("Double-rotating right");
+			if(left.balance>0)
 				left.rotateLeft();
-			} else
-				System.err.println("Single-rotating right");
 			rotateRight();
 		}
 	}
 
 	public void rotateLeft() {
-		System.err.println("Rotating left");
 		AVLTreeNode a, b, c, al, bl;
 		a=this; b=a.right; c=b.right; bl=b.left; al=a.left;
 		this.left=new AVLTreeNode(this.key);
@@ -146,7 +142,6 @@ public class AVLTreeNode {
 	}
 
 	public void rotateRight() {
-		System.err.println("Rotating right");
 		AVLTreeNode a, b, c, ar, br;
 		a=this; b=a.left; c=b.left; br=b.right; ar=a.right;
 		this.right=new AVLTreeNode(this.key);

@@ -42,6 +42,7 @@ public class AVLTree {
 		if(find(key))
 			return;
 		root.insert(key);
+		root.updateBalance();
 	}
 
 	/**

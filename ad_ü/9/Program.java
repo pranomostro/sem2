@@ -14,7 +14,6 @@ public class Program {
 				System.out.println(tree.toString());
 				return;
 			}
-			System.err.println(tree.toString());
 		}
 
 		// Wenn keine weitere Eingabe mehr erfolgt, geben Sie die Baumstruktur auf die
