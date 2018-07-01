@@ -13,6 +13,7 @@ public class Mauba {
 				System.out.println(abTree.dot());
 				return;
 			}
+			System.err.println(abTree.dot());
 		}
 		scanner.close();
 
