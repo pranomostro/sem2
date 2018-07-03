@@ -1,4 +1,3 @@
-
 public class BFS {
 	public BFS() {
 		// TODO
