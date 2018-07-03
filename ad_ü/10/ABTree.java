@@ -106,37 +106,28 @@ public class ABTree {
 
 		@Override
 		public ABTreeNode insert(int key, boolean above) {
-			System.err.println("------ insert() of " + key + " with above " + above + " in ABTreeInnerNode " + keys);
-
 			if(above==true) {
 				ABTreeInnerNode abtn=(ABTreeInnerNode)this.insert(key, false);
 				return mergeUp(abtn, true);
 			}
 
 			if(children.size()==0) {
-				System.err.println("------ inserting two new leafs");
 				keys.add(key);
 				children.add(new ABTreeLeaf());
 				children.add(new ABTreeLeaf());
 				return null;
 			}
 			if(children.get(0) instanceof ABTreeLeaf) {
-				System.err.println("------ inserting at the bottom");
 				sortedKeyInsert(key);
 				children.add(new ABTreeLeaf());
-				if(children.size()>b) {
-					System.err.println("----- returning this");
+				if(children.size()>b)
 					return this;
-				}
-				System.err.println("----- returning null");
 				return null;
 			} else {
-				System.err.println("------ inserting one level lower");
 				ABTreeInnerNode abtn=null;
-				if(key>keys.get(keys.size()-1)) {
-					System.err.println("-------- inserting after last");
+				if(key>keys.get(keys.size()-1))
 					abtn=(ABTreeInnerNode)children.get(children.size()-1).insert(key, false);
-				} else
+				else
 					for(int i=0; i<keys.size(); i++)
 						if(key<keys.get(i)) {
 							abtn=(ABTreeInnerNode)children.get(i).insert(key, false);
@@ -154,20 +145,14 @@ public class ABTree {
 		public ABTreeNode mergeUp(ABTreeInnerNode abtn, boolean top) {
 			if(abtn==null)
 				return null;
-			System.err.println("------- mergeUp() start with " + abtn.children.size() + " children and " + abtn.keys + " keys");
 			/* if abtn is too big, split it and give back the middle key */
 			int mid=abtn.getMiddle();
-			System.err.println("------ got middle " + mid);
 			if(top==true) {
-				System.err.println("-------- merging up from the top");
 				ArrayList<ABTreeNode> sl=abtn.deleteMiddle();
-				//System.err.println("------ sublists " + sl.get(0).keys + " and " + sl.get(1).keys);
 				ABTreeInnerNode newroot=new ABTreeInnerNode(mid, sl.get(0), sl.get(1));
 				return newroot;
 			}
 			int mp=sortedKeyInsert(abtn.getMiddle());
-			System.err.println("------- After inserting we have the keys " + keys);
-			System.err.println("------- New middle position " + mp);
 			ArrayList<ABTreeNode> sl=abtn.deleteMiddle();
 			children.set(mp, sl.get(0));
 			children.add(mp+1, sl.get(1));
@@ -177,7 +162,6 @@ public class ABTree {
 		/* returns: the position at which key was inserted in keys */
 
 		private int sortedKeyInsert(int key) {
-			System.err.println("-------- sortedKey() start with " + key);
 			int i;
 			for(i=0; i<keys.size(); i++)
 				if(keys.get(i)>key) {
@@ -192,12 +176,8 @@ public class ABTree {
 		/* delete the middle, return the resulting two lists as two separate ABTreeInnerNodes */
 
 		public ArrayList<ABTreeNode> deleteMiddle() {
-			System.err.println("--------- called deleteMiddle()");
 			ArrayList<ABTreeNode> res=new ArrayList<ABTreeNode>();
 			int mid=(keys.size()/2);
-			System.err.println("--------- keys " + keys + " at mid " + mid);
-			System.err.println("--------- middle " + mid);
-			System.err.println("--------- new sublists " + new ArrayList<Integer>(keys.subList(0, mid)) + " and " + new ArrayList<Integer>(keys.subList(mid+1, keys.size())));
 			res.add(new ABTreeInnerNode(new ArrayList<Integer>(keys.subList(0, mid)),
 						    new ArrayList<ABTreeNode>(children.subList(0, mid+1))));
 			res.add(new ABTreeInnerNode(new ArrayList<Integer>(keys.subList(mid+1, keys.size())),
@@ -228,8 +208,16 @@ public class ABTree {
 		}
 
 		public boolean remove(int key) {
-			// TODO
-			throw new RuntimeException("Not Implemented");
+			int i;
+			for(i=0; i<keys.size(); i++)
+				if(keys.get(i)>=key)
+					break;
+			if(keys.get(i)!=key)
+				children.get(i).remove(key);
+
+			System.err.println("found the key at " + keys);
+
+			return true;
 		}
 
 		@Override
@@ -255,40 +243,30 @@ public class ABTree {
 
 		@Override
 		public boolean validAB(boolean root, Integer lb, Integer ub) {
-			System.err.println("------ validAB() start in ABTreeInnerNode with " + keys);
 			/* the non-roots have a<=children.size()<=b */
 			if(root==false)
-				if(children.size()<a) {
-					System.err.println("------ keys are not big enough");
+				if(children.size()<a)
 					return false;
-				}
-
-			System.err.println("----- Checking whether childrensize>" + b);
 
 			if(children.size()>b)
 				return false;
 
-			System.err.println("------ Checking whether children have the same height");
-
 			/* children have the same height */
+
 			int hgt=children.get(0).height();
 			for(int i=0; i<children.size(); i++) {
 				int h=children.get(i).height();
-				System.err.println("------ Height " + h + " for child " + i);
 				if(h!=hgt)
 					return false;
 			}
 
 			/* keys are sorted */
+
 			for(int i=0; i<keys.size()-1; i++)
 				if(keys.get(i)>=keys.get(i+1))
 					return false;
 
-			System.err.println("------ keys are sorted");
-
 			/* check whether the children fit in */
-
-			System.err.println("------ Checking bounds with lower: " + lb + " and upper: " + ub + " in " + keys);
 
 			if(lb!=null)
 				if(keys.get(0)<=lb)
@@ -297,13 +275,9 @@ public class ABTree {
 				if(keys.get(keys.size()-1)>=ub)
 					return false;
 
-			System.err.println("------ no problems with bounds");
-
 			/* check the validity for every lower tree */
 
 			for(int i=0; i<keys.size(); i++) {
-				System.err.println("------ Checking whether child " + i + " is valid itself");
-				System.err.println("------ keys has size " + keys.size() + " and children has size " + children.size());
 				if(i==0) {
 					if(children.get(i).validAB(false, null, keys.get(0))==false)
 						return false;
@@ -315,8 +289,6 @@ public class ABTree {
 
 			if(children.get(keys.size()).validAB(false, keys.get(keys.size()-1), null)==false)
 				return false;
-
-			System.err.println("------ validAB() end in ABTreeInnerNode");
 
 			return true;
 		}
@@ -348,7 +320,7 @@ public class ABTree {
 	private class ABTreeLeaf extends ABTreeNode {
 		@Override
 		public ABTreeNode insert(int key, boolean above) {
-			throw new RuntimeException("insert() called on ABTreeNode, not good");
+			throw new RuntimeException("insert() called on ABTreeLeaf, not good");
 		}
 
 		@Override
@@ -364,8 +336,7 @@ public class ABTree {
 
 		@Override
 		public boolean remove(int key) {
-			// TODO
-			throw new RuntimeException("Not Implemented");
+			throw new RuntimeException("remove() called on ABTreeLeaf, not good");
 		}
 
 		@Override
@@ -405,10 +376,8 @@ public class ABTree {
 	private ABTreeInnerNode root = null;
 
 	public boolean validAB() {
-		System.err.println("---- validAB() start in ABTree");
 		if(root!=null)
 			return root.validAB(true, null, null);
-		System.err.println("---- validAB() end in ABTree");
 		return true;
 	}
 
@@ -437,7 +406,6 @@ public class ABTree {
 	 * @param key der einzufügende Schlüssel
 	 */
 	public void insert(int key) {
-		System.err.println("---- insert() start in ABTree");
 		ABTreeInnerNode nn=null;
 		if(root==null)
 			root=new ABTreeInnerNode(key);
@@ -445,7 +413,6 @@ public class ABTree {
 			nn=(ABTreeInnerNode)root.insert(key, true);
 		if(nn!=null)
 			root=nn;
-		System.err.println("---- insert() end in ABTree");
 	}
 
 	/**
@@ -455,8 +422,9 @@ public class ABTree {
 	 * @return 'true' falls der Schlüssel gefunden und gelöscht wurde, 'false' sonst
 	 */
 	public boolean remove(int key) {
-		// TODO
-		throw new RuntimeException("Not Implemented");
+		if(!root.find(key))
+			return false;
+		return root.remove(key);
 	}
 
 	/**

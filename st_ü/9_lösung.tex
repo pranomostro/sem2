@@ -1,0 +1,109 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{aeguill}
+\usepackage{titlesec}
+\usepackage[singlespacing]{setspace}
+\usepackage[left=2.5cm,right=2.5cm,top=2cm,bottom=2cm]{geometry}
+
+\setlength{\parskip}{5pt plus 1 pt minus 1 pt}
+\titlespacing\section{0pt}{3pt}{3pt}
+\titlespacing\subsection{3pt}{3pt}{3pt}
+
+\begin{document}
+
+\begin{center}
+{\Large Homework Sheet 05}
+\end{center}
+
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\section*{1}
+
+\subsection*{Advantage: Higher motivation because of high flexibility}
+
+Programmers tend to favor high flexibility in their work, because it
+means they can choose adjust their work to their state of mind. In the
+SCRUM model, a programmer can for example choose to work on an easier,
+but more monotonous process on one day when she is feeling a bit tired,
+and on a complex and difficult problem one other day when she is feeling
+more motivated and curious.
+
+\subsection*{Advantage: Low hanging fruit are picked earlier}
+
+Since easier backlog items will be picked and implemented earlier, the
+product will be more fully implemented at a point in time than in another
+model (hard problems are addressed at the end of the development process,
+and can easily be abandoned if they are deemed impossible or harder than
+previously estimated). For example a cooking app will first introduce
+a rating system for recipes before a method of identifying already cooked
+meals, before finding out the latter is nearly impossible. The first feature
+is already implemented and shipped.
+
+\subsection*{Advantage: Confusion and problems are noted early}
+
+Because of the daily sprints, confusion and problems with the design are
+recognized early and corrected before they cause any bigger damage.
+For example, when a developer realizes that the network protocol the
+project is supposed to use for file transmission is unencrypted
+and therefore not usable, the whole team can know that within 24 hours
+and react accordingly, for example switching to another protocol.
+
+\subsection*{Disadvantage: Problems with the estimation of the duration of a task}
+
+According to Hofstadter law "Everything takes longer than you estimate,
+even if you consider Hofstadters law". This holds especially true
+for software engineering. SCRUM ignores that and assumes that one
+can reasonably estimate the time it takes to finish a sprint/backlog
+task, since backlog items are often interdependent. For example, an
+inexperienced developer might pick a task early in the process that many
+other tasks depend on, but later realizes it is very hard and starts
+blocking the rest of the project.
+
+\subsection*{Disadvantage: The small team size makes it unsuitable for big projects}
+
+Very large and complex systems can't be adequately implemented using
+SCRUM, since the SCRUM team consists of 5-6 people, not enough for
+systems that would require dozens of developers minimum. For example,
+a system for train control can't be implemented using SCRUM, since it
+is too big and complex. One might consider breaking the system into
+subsystems that are then each implemented using SCRUM, but that results
+in inconsistency between the different subsystems (since SCRUM teams
+are quite tight and independently working from other teams).
+
+\subsection*{The daily meetings disrupt the programmers flow}
+
+Programmers need time to get into a state commonly called flow,
+in which they are thinking about the problem at hand and building
+models to solve the item at hand. Getting into flow takes time,
+and a 10 minute daily sprint completely destroys flow. For example
+a sprint at 2pm makes it impossible to get anything productive done
+in the afternoon, since a programmer can't get into flow when he
+knows that he will get interrupted in an hour and a half anyway,
+and can't get into flow afterwards, since the day is already nearly
+over.
+
+\section*{2}
+
+Difference: In the Unified Process, team sizes and structures change,
+while in SCRUM the team stays the same during the development process.
+
+Difference: In SCRUM, there is a lot of focus on the daily and weekly
+sprint meetings, while in the Unified Process, there is an Assessment
+every iteration, but it does not happen daily.
+
+Similarity: Both models support some initialization, in SCRUM this is
+the Kickoff-meeting, where the first product backlog is developed, in
+the Unified Process this is the Engineering Stage, where the design of
+the system is developed.
+
+Similarity: Both circular processes are divided into minor and major
+iterations, in the Unified Process this being the iteration and the phase,
+producing minor and major milestones, in SCRUM being the daily sprints
+and the 2-3 week iterations, the first consuming the currently worked
+on items, the second consuming the sprint backlog.
+
+\end{document}
