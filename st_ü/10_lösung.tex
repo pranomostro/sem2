@@ -1,0 +1,53 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{aeguill}
+\usepackage{titlesec}
+\usepackage[singlespacing]{setspace}
+\usepackage[left=2.5cm,right=2.5cm,top=2cm,bottom=2cm]{geometry}
+
+\setlength{\parskip}{5pt plus 1 pt minus 1 pt}
+\titlespacing\section{0pt}{3pt}{3pt}
+\titlespacing\subsection{3pt}{3pt}{3pt}
+
+\begin{document}
+
+\begin{center}
+{\Large Homework Sheet 10}
+\end{center}
+
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\section*{1}
+
+\subsection*{a}
+
+Bob might not have commited his changes, but only staged them. The
+solution would be to commit and push the changes to the server.
+
+Bob might have pushed his changes to a server different from the company
+git server. The company would have to find that server, ask the owners
+to delete their code from that server, push Bobs changes to the company
+server and then fire Bob.
+
+Bob might have worked on another branch and not merge the branch before
+pushing. Then he would have to merge the new branch into master, pull from
+the company server, resolve merge conflicts and then push the conflict-resolving
+changes to the company server again.
+
+\section*{2}
+
+A merge conflict happens when two developers work on the same sections
+in the same files and then try to push their changes to the same server.
+The developer who pushes later then has to pull the changes from the
+server and resolve the conflicts (often using both the git standard
+merging algorithm and resolving the merge conflict by hand. The merge is
+then commited and pushed to the server. Such conflicts can be avoided
+by committing related changes (working on one module at a time) and
+committing, pulling and pushing often to have only small conflicts when
+they arise at all.
+
+\end{document}
