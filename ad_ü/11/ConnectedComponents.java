@@ -1,16 +1,22 @@
-
 public class ConnectedComponents {
-	private BFS search;
-
 	public ConnectedComponents() {
-		search = new BFS();
 	}
 
 	/**
 	 * Zählt alle Zusammenhangskomponenten im gegebenen Graphen g
 	 */
 	public int countConnectedComponents(Graph g) {
-		// TODO
-		throw new RuntimeException("Not yet implemented.");
+		int np, c;
+		BFS search=new BFS(g);
+
+		c=np=0;
+
+		while(search.nullAt()>=0) {
+			search.sssp(g.getNode(np));
+			np=search.nullAt();
+			c++;
+		}
+
+		return c;
 	}
 }
