@@ -1,0 +1,225 @@
+\documentclass{article}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{xparse}
+\usepackage[german]{babel}
+
+\NewDocumentCommand{\codeword}{v}{%
+	\texttt{\textcolor{black}{#1}}%
+}
+
+\title{ERA-Projekt 1 - Spezifikation}
+\author{Adrian Regenfuß, Till Müller, Korbinian Stein}
+\begin{document}
+\maketitle
+\section{Organisatorisches}
+	\subsection{Aufgabenverteilung}
+		Projektleitung: Adrian Regenfuß\\
+		Verantwortlicher Vortrag: Korbinian Stein\\
+		Verantwortlicher Dokumentation: Till Müller
+	\subsection{Zeitplanung}
+		\begin{tabular}{r | l}
+			\textbf{Zeitpunkt}&\textbf{Aufgabe}\\
+			20.04.&Erste Überlegungen\\
+			27.04.&Erweiterte Überlegungen und Grundlegende Formulierung\\
+			13.05.&\emph{Fertigstellung Spezifikation}\\
+			18.05.&Grundlegende Einarbeitung in die\\
+					  &Implementierungsumgebung (NASM, Makefiles, C)\\
+			01.06.&Fertigstellung Rahmenprogramm\\
+			08.06.&Grobe Ausarbeitung Assembler-Programm\\
+			15.06.&Vollständige Tests\\
+			17.06.&\emph{Fertigstellung Implementierung}\\
+			29.06.&Grundgerüst der Dokumentation\\
+			13.07.&Dokumentation finalisiert\\
+			20.07.&Protokolle formatiert und formuliert\\
+			23.07.&Vorbereitungen für Vorträge abgeschlossen\\
+			28.07.&\emph{Fertigstellung Ausarbeitung}\\
+		\end{tabular}
+
+\section{Über die Aufgabe}
+	\subsection{Kurzübersicht}
+		Ziel: Umsetzung von $y = sin^{-1}(x)$ in Assembler\\
+		Eingabe: $-1 \leq x \leq 1$\\
+		Ausgabe: $-\frac{\pi}{2} \leq y \leq \frac{\pi}{2}$\\
+		Die Ausgabe erfolgt als Ganz- oder Dezimalzahl in Radiant, wobei auf eine Darstellung durch $\pi$ verzichtet wird.
+
+	\subsection{Ist-Soll-Analyse}
+		\subsubsection{Ist}
+			Das Assembler-Programm bekommt von einem C-Rahmenprogramm eine Dezimalzahl geliefert. Die Zahl wird vom Benutzer bestimmt und kann jeglichen Wert haben. Das Programm nutzt zur Verarbeitung Befehle des \emph{Intel x86} Befehlssatzes, vor allem die \emph{Floating Point Unit} \ref{sec:FPU} zur genauen Verarbeitung von Gleitkommazahlen. Zum Kompilieren des Programmes aus Assembler-Code wird der \emph{Netwide Assembler} (NASM) benutzt.\\
+
+		\subsubsection{Soll / Erfolgskriterien}
+			Die Ausgabe des Programmes soll ebenso eine Dezimalzahl sein, die das Ergebnis der Berechnung mit einer Genauigkeit von sechs Nachkommastellen darstellt. Im Kontext der Aufgabe ist die Notwendigkeit einer höheren Präzision nicht gegeben, die Implementierung entsprechend zu ändern wäre jedoch mit wenig Aufwand, dagegen aber mit einem entsprechend höheren Bedarf an Rechen- und Speicherressourcen verbunden.\\
+			Das berechnete Ergebnis wird über die Konsole ausgegeben. Auf Wunsch des Benutzers kann auch direkt ein Vergleichswert, der über eine C-Bibliothek berechnet wurde, angegeben werden. Diese Funktionalität ist dabei vor allem zum Testen der Präzision und Funktionalität des Assembler-Programmes nützlich.
+
+			Nachdem die Berechnung durchgeführt und ausgegeben wurde, wartet das Programm auf eine erneute interaktive Eingabe, um im Fall, dass mehrere Berechnungen durchgeführt werden, die Laufzeit durch weniger Ladevorgänge zu optimieren (siehe \ref{sec:CacheUsage}). Das Programm sollte im gesamten Ablauf zur Abwärts\-kompatibilität nur begrenzten Speicher (weniger als 10 Megabyte) verbrauchen und die Berechnungen selber sollten auch auf älteren Computern nicht länger als eine Sekunde dauern.\\
+			Alle im Abschnitt \emph{Tests} \ref{sec:Tests} definierten Ansprüche sollten vom Programm erfüllt werden und alle Berechnungen von der benötigten Zeit im Rahmen der Bibliotheks-Arkussinus-Funktion sein. Gibt der Benutzer des Weiteren die dort beschriebenen, ungültigen Werte ein, so werden diese vom Assembler-Programm erkannt und über das Rahmenprogramm eine entsprechende Fehlermeldung ausgegeben.
+
+			Den Fall eines Hardware- oder Softwarefehlers auf einer niedrigeren Ebene behandelt das Programm nicht, eventuelle Speicherkorruption kann daher zu falschen Ergebnissen oder einem Absturz führen. Da das Programm jedoch keine Daten speichert kann es hierbei nicht zu einem Zustand kommen, der sich nicht durch einen Neustart des Programmes beheben lässt, sofern die Programmdaten auf der Festplatte nicht beschädigt sind.\\
+			Allgemein sollte das Programm keine komplexen Anforderungen an den Benutzer stellen und lediglich erwartetes Verhalten realisieren.
+
+\iffalse
+\section{Allgemeine Überlegungen}
+	Das Assemblerprogramm wird mit allen benötigten Ressourcen zum Kompilieren und Ausführen ausgeliefert. Dazu gehört ein Rahmenprogramm in C, welches eine Eingabe über die Konsole aufnimmt und anschließend das Ergebnis in dieser zurückgibt. Hierbei wird eine Liste von floating-point Werten gefolgt von einem \codeword{\n} über \codeword{stdin} erwartet, oder aber eine Liste von Werten als Argumente für das Programm auf der Kommandozeile. Die Ausgabe des Programms besteht aus dem Eingabewert, gefolgt von einem Doppelpunkt und dem respektiven Arcsinus des Eingabewertes. Um die Laufzeit zu verbessern besteht die Möglichkeit, mehrere Berechnungen hintereinander auszuführen, ohne das Programm neu starten zu müssen.\\
+	Die Ergebnisse des Programmes müssen ausreichend präzise, also auf mehrere Nachkommastellen genau sein. Um jedoch zu langer Laufzeit vorzubeugen wird ein Kompromiss zwischen Präzision und aufgewendeter Zeit gefunden werden müssen. Hierbei gehen wir davon aus, dass das Ergebnis nicht für wissenschaftliche Zwecke genutzt wird, der Benutzer also eher ein schnelles Ergebnis erwartet und durchschnittlich viele Ressourcen zur Berechnung dieses zur Verfügung stellt.
+\fi
+
+\section{Lösungsansatz 1 \\ Lookup-Table mit Interpolation}
+	\subsection{Grundidee}
+		Nutzung eines Lookup-Tables mit festgelegter Größe, der vorberechnete Funktionswerte enthält. Der Lookup-Table ist fester Bestandteil des Programms und wird zusammen mit diesem ausgeliefert.\\
+		Es bestehen zwei Möglichkeiten, die Präzision des Lookup-Tables zu bestimmen:\\
+		\begin{enumerate}
+			\item Skalierung des Lookup-Tables (viele Werte bei starken Funktionsänderungen, weniger Werte bei schwachen Funktionsänderungen)
+			\item Lineare Veränderung der Größe des Lookup-Tables
+		\end{enumerate}
+		Während die erste Methode den Speicher effizienter nutzen würde, besteht dabei der Nachteil der erhöhten Komplexität beim Auswählen des richtigen Eintrages.
+
+	\subsection{Nutzung des Caches}
+		\label{sec:CacheUsage}
+		Der Lookup-Table sollte in den Cache des Prozessors passen, da damit die Ausführungsgeschwindigkeit deutlich optimiert wird. Bei modernen Prozessoren sollte der Cache groß genug für einen Lookup-Table mit ausreichend vielen Werten sein. Hierbei wäre die Idee, den Table beim Start des Programmes zu laden, um dann schnell auf Eingaben reagieren zu können. Der Ladevorgang verlangsamt hierbei den Programmstart, wirkt sich aber - vor allem bei mehreren Berechnungen - positiv auf die Laufzeit aus.
+
+	\subsection{Weiterführende Überlegungen}
+		\begin{itemize}
+			\item Da nicht für jede mögliche Eingabe ein Eintrag im Lookup-Table existieren kann, muss bei manchen Eingaben das Ergebnis aus zwei vorhandenen Einträgen interpoliert werden. Dadurch verbessert sich die Genauigkeit der Werte weiter, der Rechenaufwand bleibt jedoch gering, da die Interpolation lediglich zwei Werte betrachten muss. Für diese Operation wird die \emph{Floating Point Unit} (FPU) verwendet, da sowohl Ein- als auch Ausgabe nur selten ganzzahlig sind.\\
+			Durch den beschränkten Definitionsbereich in Verbindung mit einem ausreichend großem Lookup-Table sollte das Ergebnis auch bei Verwendung von linearer Interpolation präzise genug sein.
+
+			\item Formel für lineare Interpolation:\\
+				\\
+				\begin{tabular}{l | l}
+					$x$ & Eingabewert \\
+					$x_1$ & Nächster kleinerer $x$-Wert in Lookup-Table \\
+					$x_2$ & Nächster größerer $x$-Wert in Lookup-Table\\
+					$y_1$ & $y$-Wert in Lookup-Table zu $x_1$ \\
+					$y_2$ & $y$-Wert in Lookup-Table zu $x_2$ \\
+					$y$ & Ausgabewert \\
+				\end{tabular}\\
+
+				$ y := y_1 + \frac{y_2-y_1}{x_2-x_1} \cdot (x - x_1) $
+
+			\item Um den richtigen Wert aus dem Lookup-Table lesen zu können, muss der Eingabewert $x$ mit $-1 \leq x \leq 1$ durch Addition mit $1$ in den Bereich $0 \leq x \leq 2$ verschoben werden.
+
+			\item Hat der Lookup-Table $z$ Einträge, so lässt sich danach mit $e := x \cdot \frac{1}{2} z$ der entsprechende Eintrag $e$ ermitteln, der den zu $x$ passenden Funktionswert enthält. Existiert ein Eintrag an dieser Stelle nicht, beispielsweise, weil das Ergebnis zwischen zwei Einträgen des Tables liegt, so wird die oben definierte Interpolationsfunktion mit den Werten $x := e$, $x_1 := \lfloor e \rfloor$ und $x_2 := \lceil e \rceil$ aufgerufen.
+
+			\item Zur Nutzung der Interpolationsfunktion, sowie der Berechnung von $e$ mit der oben definierten Formel, ist die Nutzung der \emph{FPU} nötig. Diese wird in Abschnitt \ref{sec:FPU} genauer beschrieben.
+		\end{itemize}
+
+
+
+	\iffalse
+	DIES IST EIN KOMMENTAR UND WIRD VON LATEX NICHT AUSGEFÜHRT
+	Diese Punkte sind im darüberliegenden Absatz ausgeführt
+	Mapping von x-Werten zu möglichst genauen y-Werten durch Interpolation.
+	Welche Precision ist das Ziel? Vorschlag: Prototypen mit kleinen Präzisionen. Außerdem: Einarbeitung in den FPU-Befehlssatz und dessen Funktionsweise.
+
+
+	Lineare Interpolation ist durch kleinen Input-Bereich und präzisem und großem Lookup-Table vollkommen ausreichend.
+	Somit sollte auch das Ergebnis präzise genug sein.
+
+	Wie funktioniert die Interpolation? Was sind y1, y2 usw.? Muss genau aufgeführt werden, um die Formel zu erklären
+
+
+	\noindent Formel für Lineare Interpolation wobei $x$ der Eingabewert und $y$ der gesuchte Wert sind:\\
+
+	\noindent $ y = y_1 + \frac{y_2-y_1}{x_2-x_1} \cdot (x - x_1) $
+
+	\noindent Umwandlung von x als Eingabewert := $-1 \leq x \leq 1$  in einen in den Lookup-Table einsetzbaren Wert.
+	$ x = x + 1 \rightarrow 0 \leq x \leq 2$\\
+	Skalierung von x: $ x = x \cdot 10000 \rightarrow 0 \leq x \leq 20000 $\\
+
+	\fi
+
+\section{Lösungsansatz 2 - Reihenrechnung}
+
+	\subsection{Grundidee}
+		Das Programm berechnet nach der Eingabe das Ergebnis mithilfe einer festgelegten Formel. Die Implementation der Formel nutzt dabei ausschließlich die Grundrechenarten, um das Ergebnis anzunähern. Die Präzision wird dabei besser, je länger die Berechnung ausgeführt wird.\\
+
+	\subsection{Bestimmung des Ergebnisses durch Reihenberechnung}
+		Um ein Ergebnis zu bestimmen wird eine Reihenrechnung genutzt. Diese wird präziser, je länger die Reihe erweitert wird. Das Ergebnis ist daher nie genau, sondern immer nur eine Annäherung. Um den Arkussinus zu bestimmen wird folgende Reihe genutzt:\\
+		$arcsin(x) = x+\frac{1}{2} \cdot \frac{1}{3}x^3 + \frac{1 \cdot 3}{2 \cdot 4}\frac{x^5}{5} + ... + \frac{1\cdot3\cdot5\cdot...\cdot(2n-1)x^{2n+1}}{2\cdot4\cdot6\cdot...\cdot2n(2n+1)} + ...$\\
+
+	\subsection{Nutzung der \emph{Floating Point Unit}}
+		Auch in diesem Lösungsansatz ist die Nutzung der FPU nötig. Eine Übersicht der FPU ist in Abschnitt \ref{sec:FPU} zu finden.
+		\iffalse
+			Wie benutzt man das Teil?! Kurze Übersicht, was da passieren sollte reicht wahrscheinlich
+		\fi
+
+	\subsection{Weitere Überlegungen}
+		\begin{itemize}
+			\item Um die Laufzeit zu verbessern besteht die Möglichkeit, bereits in der Reihe berechnete Werte im Speicher der \emph{FPU} zu belassen, um diese erneut nutzen zu können, wenn sie gebraucht werden. Hierbei könnte sich bei günstigen Bedingungen die Laufzeit verbessern, allerdings kann es in schlechten Fällen durch die benötigte Abstraktion zur Organisation der Zwischenergebnisse zu einer schlechteren Laufzeit kommen.
+			\item Es könnten verschiedene Methoden zur Festlegung der Reihenlänge genutzt werden, beispielsweise könnte man die Geschwindigkeit des Computers als Grundlage nehmen, um immer ein Ergebnis in annehmbarer Zeit berechnen zu können. Alternativ besteht die Möglichkeit, den Benutzer nach der gewünschten Präzision der Berechnung zu fragen. Beide Möglichkeiten resultieren jedoch in einer höheren Komplexität des Programmes, machen es dafür aber vielseitiger einsetzbar.
+		\end{itemize}
+
+\newpage
+\section{Nutzung der \emph{Floating Point Unit}}
+	\label{sec:FPU}
+
+	\subsection{Register der FPU}
+		Um Berechnungen mit double- oder float-Werten durchführen zu können, müssen  diese erst in das Register der FPU geladen werden. Diese Register sind 80-bit breit und werden mit den Indizes $0$ - $7$ (Nachfolgend $r_0$ - $r_7$) nummeriert, sie verhalten sich allerdings wie ein Stack, mit der Besonderheit, dass dieser \emph{rotiert}. Die Register der FPU werden zu Beginn auf den Anfangszustand (alle Register sind leer), mittels des Befehls \codeword{finit} zurückgesetzt. Wenn ein 'reeller' Wert durch den Befehl \codeword{fld {size} {address}} in ein Register geladen wird, steht der Wert nun in $r_0$, alle vorherigen Werte werden um eine Stelle weitergeschoben. Ein Wert der bspw. vor einer Ladeoperation in $r_0$ stand, steht nach der Operation in $r_1$. In ein Register kann nur geladen werden, wenn dieses vorher leer ist.\\
+		Um den Wert in $r_0$ in den Speicher zu laden, wird der Befehl \codeword{fstp {size} {address}} verwendet. Dabei wichtig ist, dass \codeword{fstp} den Wert aus $r_0$ vom Stack entfernt und diesen nach links rotiert.
+	\subsection{Rechenoperationen der FPU}
+		\subsubsection{Addition}
+			Addition erfolgt durch den Befehl \codeword{fadd}, und ist im Folgenden definiert:\\
+			$r_0 := r_1 + r_0$ \\
+			Somit liegt nach das Additionsergebnis nach der Addition in $r_0$, das alte $r_0$ wird überschrieben.
+		\subsubsection{Subtraktion}
+			Subtraktion wird durch \codeword{fsub} ausgeführt, Folgende Operation steht dahinter:\\
+			$r_0 := r_1 - r_0$\\
+			Wie bei der Addition wird das Ergebnis im $r_0$ gespeichert und dessen alter Wert überschrieben.
+		\subsubsection{Multiplikation}
+			Die Multiplikation wird durch \codeword{fmul} aufgerufen. Sie ist wie folgt definiert:\\
+			$r_0 := r_1 \cdot r_0$\\
+			Das Ergebnis wird in $r_0$ gespeichert, alte Werte überschrieben.
+		\subsubsection{Division}
+			Der Aufruf der Division erfolgt durch \codeword{fdiv}. Definition:\\
+			$r_0 := r_1 \div r_0$\\
+			Wie in vorherigen Operationen, werden alte Werte in $r_0$ durch das Ergebnis überschrieben.
+		\subsubsection{Allgemein}
+		Durch das Hinzufügen eines \codeword{p} (bspw. \codeword{fmulp}) am Ende jedes dieser Befehle, wird der Wert in $r_1$ zusätzlich vom Stack entfernt.
+
+
+\section{Entscheidung für Lösungsansatz 1}
+
+	\subsection{Abwägung der Vor- und Nachteile}
+		Im Vergleich der beiden Ansätze ergeben sich im zweiten mehrere Probleme, die diesen Ansatz lediglich für spezielle Anwendungsfälle interessant machen. Kennt man jedoch den geplanten Einsatzzweck nicht, so hat Ansatz 1 weniger Nachteile. Zu den möglichen Problemen, die die Verwendung von Ansatz 2 mit sich bringt, gehören:
+
+		\begin{itemize}
+			\item Genaue Feststellung der Präzision in Abhängigkeit der verwendeten Zeit schwierig, da dies auf dem Prozessor, parallel laufenden Programmen und weiteren Faktoren basiert. Bei einer festgelegten Anzahl an Durchläufen wäre die Präzision vorhersehbar, allerdings besteht dabei das Problem, dass bei langsameren Prozessoren die Berechnung vergleichsweise lange dauern kann.
+			\item Durch die höhere Komplexität der Berechnung besteht die Gefahr, dass sich durch Rundungsfehler oder Ungenauigkeiten der \emph{FPU} über die ganze Reihe hinweg Fehler einschleichen, die die Berechnung eines sehr genauen Ergebnisses stark erschweren.
+			\item Die Laufzeit hängt möglicherweise vom Eingabewert ab, da manche Ergebnisse deutlich schneller berechnet werden können. Insbesondere der Arkussinus von $0$ ist dabei ein Sonderfall.
+		\end{itemize}
+		Alle drei Probleme lassen sich durch die Verwendung eines Lookup-Tables mit Interpolation lösen. Hierbei ist die Laufzeit nahezu unabhängig vom Eingabewert und auch auf langsameren Systemen durch die wenigen benötigten Operationen ausreichend gering.\\
+		Einzig die Möglichkeit, die Präzision der Berechnungen auch nach der Auslieferung des Programmes ohne Eingriff verändern zu können, sowie der geringere Speicherverbrauch, ist ein Vorteil der vollständigen Berechnung des Ergebnisses. Die damit verbundene Komplexität in der Implementierung und für den Benutzer - insbesondere auch bei Betrachtung der anderen Vor- und Nachteile der Ansätze - machen diese Variante jedoch nur in Ausnahmefällen erstrebenswert.
+
+	\subsection{Begründung}
+
+		Zusammenfassend ist Ansatz 2 für spezielle Einsätze unter genau definierten Restriktionen insbesondere des zur Verfügung stehenden Speichers gut geeignet. Als allgemein anwendbare Lösung überzeugt Ansatz 1 jedoch durch deutlich verbesserte Laufzeit und geringere Komplexität. Zudem ist der Speicheraufwand bei dieser Lösung zwar höher, hält sich jedoch auch bei einem relativ großen Lookup-Table in einem für moderne Computer gut vertretbaren Rahmen.\\
+
+\iffalse
+Befürchtung: Performance-Probleme. Feststellung der Präzision ist kompliziert, bzw. schwer einzuschätzen.\\
+Frage: Wie legt man die Reihenlänge fest?\\
+Berechnung der Reihe laut Aufgabenstellung:\\
+TODO: Son FPU-Rumgefummle...
+Mathematische Formel schreiben
+Begründung: Speichernutzung ist billiger als Performance.
+\fi
+
+\section{Tests}
+\label{sec:Tests}
+
+	\subsection{Tests auf Korrektheit}
+	Die Funktion wird von einem C-Programm aus auf zwei verschiedene Arten getestet: Mit vorher festgelegten Werten sowie mit zufälligen Eingabewerten.
+
+	\subsubsection{Zufällige Werte}
+	Bei zufälligen Werten wird die Funktion \codeword{asin()} aus der C-Standardbibliothek als Vergleichswert genommen. Die Anzahl der getesteten Werte sollte, ähnlich wie bei den Performance-Tests, so viele Werte wie möglich abdecken, ohne die Ausführung der Tests zu sehr zu verlangsamen. Hierbei sollten nur gültige zufällige Werte aus dem Intervall [-1,1] als Eingaben verwendet werden.
+
+	\subsubsection{Festgelegte Werte}
+	Bei den festgelegten Werten wird das erwartete Ergebnis in einer Tabelle gespeichert. Diese Tabelle sollte Werte enthalten, die besonders häufig zu Fehlern führen, wie beispielsweise Werte direkt am Rand des Definitionsbereiches, sowie Werte, die knapp darunter als auch knapp darüber liegen (in diesem Fall -1, 1, -1.0000001, -0.9999999, 0.99999999 und 1.0000001, sowie die 0). Des Weiteren werden  Werte getestet, die weit außerhalb des Definitionsbereiches liegen.
+
+	\subsection{Performance-Tests}
+	Die Tests sollten zudem die Implementierung mit der Funktion \codeword{asin()} aus der C-Standardbibliothek auf ihre Geschwindigkeit vergleichen. Hierzu kann man die Bibliotheksfunktion \codeword{clock()} verwenden. Die beiden Funktionen sollten hierbei auf unterschiedliche, zufällige Datensätze ausgeführt werden, um Cache-Optimierungen ausschließen zu können, und die Datensätze sollten groß genug sein, um Ausreißer zu verhindern. Die genaue Größe des Datensatzes sollte die Ausführung der Tests in akzeptabler Zeit zulassen (also höchstens wenige Sekunden, idealerweise aber weniger als eine Sekunde). Die Bibliotheksfunktion \codeword{asin()} benötigt auf einem modernen Prozessor für 2.000.000 Elemente knapp 0,15 Sekunden, hierbei sollten sich also wenige Probleme ergeben.
+
+
+
+
+\end{document}

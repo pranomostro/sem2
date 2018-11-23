@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{blindtext}
+\title{ERA-Projekt Protoll 1, 2018-06-15}
+\author{Adrian Regenfuß}
+\begin{document}
+\maketitle
+
+\section{Ungenauigkeiten in der Assembler-Implementierung}
+
+Bei diesem Treffen wurde bemerkt, dass die Assembler-Implementierung
+in ihrere Genauigkeit nicht den in den Tests vorgegebenen Standards
+entsprach. Verschiedene Vorschläge wurden umgesetzt, um diese Problem
+zu lösen.
+
+\section{Halbieren der Tabellengröße}
+
+ Zunächst wurde vorgeschlagen, die Genauigkeit der Lookup-Tabelle
+dadurch zu erhöhen, indem man die Symmetrie des Arkussinus ausnutzt.
+Hierbei müssen nur die Ergebnisse für positive Werte gespeichert werden,
+die notfalls bei negativen Eingabewerten negiert werden.
+
+\section{Einführen einer Tabelle für Werte am oberen Rand des Wertebereiches}
+
+Zudem wurde die Lookup-Tabelle in zwei Tabellen gleicher Größe aufgespalten,
+eine für Eingabewerte unter 0.9, und eine für Eingabewerte über 0.9.
+Die würde die Präzision erhöhen, da der Arkussinus sich bei größer werdenden
+Eingabewerten immer stärker verändert.
+
+\section{Lockern der Genauigkeitsbedingungen}
+
+Die erste Version der Tests hatte geprüft, ob das Ergebnis bis auf die
+sechste Nachkommastelle dem korrekten Ergebnis entsprach. Dies wurde gelockert,
+so dass nur noch die ersten drei Nachkommastellen erfolgskritisch waren.
+
+\end{document}

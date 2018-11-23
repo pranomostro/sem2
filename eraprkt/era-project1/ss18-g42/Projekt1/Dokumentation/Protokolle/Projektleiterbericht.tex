@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{blindtext}
+\title{ERA-Projektleiterbericht Projekt 1, Assembler}
+\author{Adrian Regenfuß}
+\begin{document}
+\maketitle
+
+\section{Aufgabe des Projektes}
+
+Das Ziel des Projektes bestand darin, den Arkussinus in x86-Assembler
+mithilfel des Assemblers nasm zu implementieren. Hierbei sollten
+zudem Tests für das Programm und eine ausführliche Dokumentation
+der Ergebnisse verfasst und bereitgestellt werden und eine Organisationsstruktur
+innerhalb des Teams hergestellt werden.
+
+\section{Bestehende Kenntnisse}
+
+Bei diesem Projekt konnten bestehende Kenntnisse besonders gut
+eingesetzt werden. Neben den im vorigen Semester erlernten Grundlagen
+für Assembler bestand bereits ein Wissen über die Programmiersprache
+C und die Verwendung von Makefiles. Diese konnte eingesetzt werden, um
+die Entwicklungsumgebung mit Tests und Makefiles schnell zu erstellen
+und sich daraufhin größtenteils auf die Assembler-Implementierung zu
+fokussieren. Bei Assembler bestand bereits grundlegendes Wissen über die
+x86-Architektur, den Stack und Register.
+
+Informationen über die FPU, den Aufruf von in Assembler geschriebenen
+Funktionen aus C heraus und die C-Aufrufkonvention konnten ohne
+größere Probleme über Recherche im Internet gefunden werden. Da
+bereits alle Gruppenmitglieder grundlegende Fähigkeiten im Umgang mit
+dem Versionskontrollsystem git hatten, aber nur geringe Kenntnisse über
+svn hatten, wurde auf der Plattform Gitlab ein separates Repository
+eingerichtet, über das der Großteil der Arbeit ausgetauscht wurde.
+
+\section{Aufgabenverteilung und Organisation}
+
+Team-interne Kommunikation und Organisation fanden größtenteils über
+den Voice-Chat-Service Discord und eine eigens dafür erstellte WhatsApp
+Gruppe statt. Ergebnisse wurden, wie bereits beschrieben, aufgrund
+höherer Familiarität über ein GitLab Repository ausgetauscht.
+
+Die Rollen wurden auf der Basis von Schätzungen der Kenntnisse und
+Performance der Mitglieder verteilt, einzelne Aufgaben wurden meistens
+freiwillig von den individuellen Mitgliedern übernommen, die sich am
+kompetentesten für die gegebene Aufgabe hielten.
+
+Wurde Hilfe benötigt, genügte meistens eine kurze Frage in der
+WhatsApp-Gruppe oder im Discord-Channel. Treffen wurden anfangs
+wöchentlich abgehalten, dies wurde dann jedoch zu späteren Zeitpunkten
+weniger notwendig, da die Aufgabenverteilung im Projekt recht klar war
+und größere Probleme schnell und unbürokratisch gelöst wurden. In
+den Tagen vor einer Abgabe wurde meistens noch eine kurze gemeinsame
+Besprechung der Ergebnisse und eine Kontrolle dieser abgehalten.
+
+Kollaboration war aufgrund der Nutzung eines verteilten
+Versionskontrollsystems einfach, es mussten jedoch mehrere Male Konflikte
+in den Dateien gelöst werden.  Aufgrund der relativ hohen Modularität
+des Projektes konnten unabhängige Teile paralell von verschiedenen
+Mitgliedern bearbeitet werden. Zum Beispiel wurden die Tests paralell
+zu den frühen Stadien der Implementierung verfasst, was einen Ablauf
+vergleichbar mit dem sogenannten Test-Driven-Development erlaubte.
+
+\section{Probleme und Lösungen}
+
+Im Projekt ergaben sich einige Male kleiner Probleme, und im relativ
+späten Stadium stellte sich ein größeres Problem heraus. Die kleineren
+Probleme konnten durch kurze Absprachen gelöst werden.
+
+Bei dem größeren Problem, das in der ungenügenden Genauigkeit der
+Implementierung bestand, wurde ein Treffen über Discord vereinbart,
+in dem mögliche Lösungsansätze in der Gruppe besprochen und analysiert
+wurden. Man einigte sich auf drei kombinierte Lösungsstrategien:
+Das Aufteilen der Interpolationstabelle in zwei Tabellen, wobei
+eine für Eingabewerte unter 0.9 und eine für Eingabewerte über 0.9
+verwendet wurde. Dies sollte die Präzision erhöhen, da der Arksinus
+nah an 1 stärker zu wachsen beginnt. Zudem wurde beschlossen, die
+Symmetrie des Arkussinus auszunutzen und nur positive Tabellenwerte
+zu speichern, die notfalls bei negativen Eingabewerten negiert wurden.
+Zuletzt wurden die Genauigkeitsbedingungen in den Tests auf ein
+realistisches Maß gesenkt.
+
+Das Auftreten eines größeren Problems wurde also innerhalb weniger Tage
+durch eine Notfallsitzung angegangen und erfolgreich gelöst, was die
+Entwicklung des Programmes nur um einen um einige Tage verlängerte.
+Die stellte jedoch kein Problem dar, da der Entwicklungsplan eine
+solche Verzögerung bereits einberechnet hatte.
+
+\section{Fazit}
+
+Die Leitung dieses Projektes war eine angenehme und kollaborative Aufgabe.
+Zu keinem Zeitpunkt mussten Teammitglieder zur Arbeit aufgefordert werden,
+häufig wurden Aufgaben selbstständig übernommen. Dennoch bestand zu jedem
+Zeitpunkt ein reger Austausch zwischen den Teammitgliedern und hierarchische
+Koordination war fast nie notwendig. Besonders Korbinian Stein tat sich durch
+sein motiviertes und schnelles Arbeiten an der Implementierung des Programmes
+hervor.
+
+\end{document}

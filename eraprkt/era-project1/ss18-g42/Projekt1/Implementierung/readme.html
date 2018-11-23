@@ -1,0 +1,97 @@
+<h1>ERA-Praktikum, Projekt 1: arcsin in Assembler</h1>
+
+<p><strong>Ungenauigkeiten-Disclaimer: siehe unten</strong></p>
+
+<p>Das Programm bekommt &uuml;ber ein C-Rahmenprogramm eine Zahl und liefert mittels Lookup-Table einen m&ouml;glichst genauen Wert des Arkus-Sinus der Zahl zur&uuml;ck.</p>
+
+<h2>Abh&auml;ngigkeiten</h2>
+
+<ul>
+<li>Version-Control-System: <a href="https://subversion.apache.org/">subversion</a> (Version 1.9.3)</li>
+<li>Netwide Assembler: <a href="https://www.nasm.us/">nasm</a> (Version 2.11.08)</li>
+<li>C-Compiler: <a href="https://gcc.gnu.org/">gcc</a> (Version 5.4.0)</li>
+<li>Build-Organisationstool: <a href="https://www.gnu.org/software/make/">make</a> (Version 4.1)</li>
+</ul>
+
+
+<p>Die jeweiligen Versionsnummern zeigen die Versionen, mit denen das Programm getestet wurde, andere Versionen sollten also ebenso funktionieren.<br/>
+Getestet wurde auf Ubuntu 16.04 32-Bit.</p>
+
+<h2>Installation</h2>
+
+<ol>
+<li>Ordner aus SVN klonen <code>svn checkout svn://vmbode1.informatik.tu-muenchen.de/erapraktikum</code></li>
+<li>In den Ordner wechseln <code>cd erapraktikum/ss18-g42/Projekt1/Implementierung</code></li>
+<li>Kompilieren <code>make</code></li>
+</ol>
+
+
+<h2>Ausf&uuml;hren des Programms</h2>
+
+<p>Mit <code>./bin/arcsin [input]</code> wird f&uuml;r den input der entsprechende Wert berechnet</p>
+
+<h2>Ausf&uuml;hren von Tests</h2>
+
+<p><code>make testrun</code> ausf&uuml;hren: Tests und ben&ouml;tigte Dateien werden kompiliert und ausgef&uuml;hrt.<br/>
+Getestet werden nun:</p>
+
+<ul>
+<li>Zuf&auml;llige Werte</li>
+<li>Ung&uuml;ltige Werte</li>
+<li>Randbereiche (<strong>siehe Ungenauigkeiten</strong>)</li>
+<li>Die ben&ouml;tigte Zeit</li>
+</ul>
+
+
+<p>Die Ergebnisse des Assembler-Programms werden dann mit denen der Bibliotheksfunktion verglichen und die Resultate ausgegeben.</p>
+
+<h2>Hinzuf&uuml;gen von Tests</h2>
+
+<ol>
+<li>Zum Hinzuf&uuml;gen von Tests die Datei &ldquo;src/c/tests.c&rdquo; bearbeiten:
+
+<ul>
+<li>In das Array <code>test_value</code> in Zeile 11 Wertepaare hinzuf&uuml;gen
+
+<ul>
+<li>In der Form <code>{[Eingabewert], [erwarteter Ausgabewert]}</code></li>
+<li>Beispielsweise  <code>{[0], [0]}</code></li>
+</ul>
+</li>
+<li><em>Alternativ:</em> F&uuml;r komplexere Tests der <code>main</code>-Methode eine Routine hinzuf&uuml;gen</li>
+</ul>
+</li>
+<li><code>make clean</code>, <code>make</code> und <code>make testrun</code> aufrufen, um die Tests zu starten</li>
+</ol>
+
+
+<h2>Ungenauigkeiten</h2>
+
+<p>Vor allem in den Randbereichen werden die Ergebnisse des Programmes ungenauer.<br/>
+Dies hat prim&auml;r folgende Gr&uuml;nde:</p>
+
+<ul>
+<li>Floating-Point-Fehler k&ouml;nnen die Eingabe leicht ver&auml;ndern</li>
+<li>In den Randbereichen &auml;ndert sich die Funktionswerte sehr stark, dies wirkt sich auf die Pr&auml;zision der Interpolation aus</li>
+</ul>
+
+
+<p>Tests in den entsprechenden Bereichen geben daher vor allem in den Randbereichen eine Warnung aus, wenn eine das berechnete Ergebnis nicht dem Library-Ergebnis entspricht. Dieses Verhalten ist somit erwartet.</p>
+
+<h2>Befehle</h2>
+
+<pre><code>compile:    make
+debug:      make debug (Kompilierung mit Debug-Symbolen in Bin&auml;rdateien)
+run:        ./bin/arcsin [input]
+test:       make testrun
+cleanup:    make clean
+</code></pre>
+
+<h2>Mitwirkende</h2>
+
+<ul>
+<li>Projektleitung: Adrian Regenfu&szlig;</li>
+<li>Verantwortlicher Vortrag: Korbinian Stein</li>
+<li>Verantwortlicher Dokumentation: Till M&uuml;ller</li>
+</ul>
+

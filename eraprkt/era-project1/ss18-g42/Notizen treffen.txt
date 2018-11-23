@@ -1,0 +1,36 @@
+Aufgabenstellung:
+Kurze Beschreibung, was soll man machen
+Ist-Soll-Analyse:
+-Erfolgskriterium
+-Technische Details
+=> Wie viele Nachkommastellen, was genau ist das Ziel?
+=> Alles Begr�den
+-Fehlerbehandlung vorzugsweise in Assembler, wenn sehr unpraktikabel im Rahmenprogramm
+=> Grobe Fehlerbehandlung in ASM
+=> Hardwarefehler behandeln?
+
+Kleine Diskrepanzen in Ordnung
+
+VHDL:
+-M�lichkeiten der Implementierung
+-State Machine vs. andere Variante
+=> State Machine malen
+
+Daten von Speicheranwahl
+
+Liegt f� zwei �etragungszyklen an? Sinnvoll Begr�den; Keine Richtige Angabe -> Wir nehmen beides
+-Tests, die nicht funktionieren definieren
+
+
+L�ge:
+ca. 3 bis 6 Seiten
+Bei ASM mehr zum Schreiben, VHDL evtl. Bilder
+
+Tests:
+-Sollten alles wichtige Testen
+=> Vom Benutzer spezifizierbare Testwerte (Unsere Ausgabe vs. Library-Ausgabe)
+=> Richtige Werte, falsche Werte, Randwerte
+
+spezifikation.pdf in Ordner spezifikation
+
+=> Rechtschreibpr�ung!

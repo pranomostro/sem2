@@ -1,0 +1,10 @@
+GHDL Makefile macht folgendes:
+all: ghdl -a *.vhd
+tb_demo: ghdl -e tb_demo (tb_demo ist Name der entity, die simuliert werden sollte)
+gsim: 
+./tb_demo  --stop-time=300sec --wave=tb_demo.ghw => Nach 300 Sekunden Simulation stoppen, Waveform in tb_demo.ghw speichern
+gktwave tb_demo.ghw tb_demo.gtk => Öffnet Waveform Datei mit tb_demo.gtk Konfiguration
+
+
+tb_demo.gtk definiert, welche Waves angezeigt werden (Positionen, Farben, usw.)
+=> Wird generiert, indem man das Programm öffnet, alles einstellt, wie es sein soll, dann oben File -> Write Save File

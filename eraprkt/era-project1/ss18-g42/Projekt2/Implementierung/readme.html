@@ -1,0 +1,87 @@
+<h1>ERA-Praktikum, Projekt 2: Parallel-Seriell-Konverter in VHDL</h1>
+
+<p>Dieser in VHDL implementierte Baustein ist ein Parallel-Seriell-Konverter, der
+nach einem vorgegebenen Protokoll zuvor parallel eingegebene Daten seriell
+&uuml;ber zwei Leitungen ausgibt.</p>
+
+<h2>Abh&auml;ngigkeiten</h2>
+
+<ul>
+<li>Version-Control-System: <a href="https://subversion.apache.org/">subversion</a> (Version 1.9.3)</li>
+<li>VHDL-Kompiler: <a href="http://ghdl.free.fr/">ghdl</a> (Version 0.29)</li>
+<li>Build-Organisationstool: <a href="https://www.gnu.org/software/make/">make</a> (Version 4.1)</li>
+<li>Zum Anzeigen der Wellenformen nach der Simulation: <a href="http://gtkwave.sourceforge.net/">gtkwave</a> (Version 3.3.66)</li>
+</ul>
+
+
+<p>Die jeweiligen Versionsnummern zeigen die Versionen, mit denen das Programm getestet wurde, andere Versionen sollten also ebenso funktionieren.<br/>
+Getestet wurde auf Ubuntu 16.04 32-Bit.</p>
+
+<h2>Installation</h2>
+
+<ol>
+<li>Ordner aus SVN klonen <code>svn checkout svn://vmbode1.informatik.tu-muenchen.de/erapraktikum</code></li>
+<li>In den Ordner wechseln <code>cd erapraktikum/ss18-g42/Projekt2/Implementierung</code></li>
+<li>Kompilieren <code>make</code></li>
+</ol>
+
+
+<h2>Ausf&uuml;hren von Tests</h2>
+
+<ol>
+<li><p>&ldquo;psc_tb.vhd&rdquo; bearbeiten und in den Zeilen 27 bis 29, sowie 42 bis 44 einen Test einkommentieren (standardm&auml;&szlig;ig ist Test 1 ausgew&auml;hlt).</p>
+
+<p> <strong>Nach &auml;ndern des Tests muss erneut <code>make</code> aufgerufen werden, damit die Bausteine mit den neuen Einstellungen erzeugt werden.</strong></p></li>
+<li><p><code>make run</code> aufrufen. Die Simulation wird nun gestartet und der Test l&auml;uft durch.</p>
+
+<p> <em>Sollte es Abweichungen zwischen dem erwarteten und dem tats&auml;chlichen Ergebnis geben, so werden diese w&auml;hrend der Simulation in der Konsole ausgegeben.</em></p></li>
+<li><p>GTKWave &ouml;ffnet sich nun mit den erzeugten Wellenformen.</p>
+
+<ul>
+<li>In den ersten 16 Takten soll <strong>expected</strong> mit <strong>out0</strong> &uuml;bereinstimmen</li>
+<li>In den Takten 17 bis 32 soll <strong>expected</strong> mit <strong>out1</strong> &uuml;bereinstimmen</li>
+</ul>
+</li>
+</ol>
+
+
+<h2>Hinzuf&uuml;gen von Tests</h2>
+
+<p>Zum Hinzuf&uuml;gen von Tests die Datei &ldquo;psc_tb.vhd&rdquo; bearbeiten:</p>
+
+<ol>
+<li>Alle existierenden Tests in den Zeilen 27 bis 29 und 42 bis 44 auskommentieren</li>
+<li>In Zeile 45 die Eingangsdaten dem <code>std_logic_vector input</code> der L&auml;nge 16 Bit zuweisen
+
+<ul>
+<li>In der Form: <code>input &lt;= "BBBBBBBBAAAAAAAA";</code></li>
+<li>Beispielsweise: <code>input &lt;= "1111111101100011";</code></li>
+</ul>
+</li>
+<li>In Zeile 30 die erwarteten Ausgangsdaten als <code>std_logic_vector expected</code> der L&auml;nge 32 Bit definieren
+
+<ul>
+<li>In der Form: <code>signal expected : std_logic_vector(31 downto 0) := "1100BBBBBBBB00111100AAAAAAAA0011";</code></li>
+<li>Beispielsweise: <code>signal expected : std_logic_vector(31 downto 0) := "11001111111100111100011000110011";</code></li>
+</ul>
+</li>
+<li><code>make</code> zum erneuten Kompilieren aufrufen</li>
+<li><code>make run</code> zum Starten der Simulation aufrufen</li>
+</ol>
+
+
+<h2>Befehle</h2>
+
+<pre><code>compile:    make
+run:        make run
+cleanup:    make clean
+</code></pre>
+
+<h2>Mitwirkende</h2>
+
+<ul>
+<li>Projektleitung: Till M&uuml;ller</li>
+<li>Verantwortlicher Vortrag: Adrian Regenfu&szlig;</li>
+<li>Verantwortlicher Dokumentation: Korbinian Stein</li>
+</ul>
+

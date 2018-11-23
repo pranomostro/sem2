@@ -1,0 +1,43 @@
+package edu.tum.cs.i1.eist;
+
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
+import java.net.URL;
+
+import javax.swing.JPanel;
+
+import edu.tum.cs.i1.eist.car.*;
+
+public class Bumpers {
+	
+	public static void setupImages() {
+		try {
+			AutonomousCar.DEFAULT_AUTONOMOUS_CAR_IMAGE = loadImage("Tesla.png");
+			UserCar.DEFAULT_USER_CAR_IMAGE = loadImage("Audi.png");
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+	}
+
+	public static void main(String[] args) {
+
+		setupImages();
+		
+		BumpersWindow bumperWindow = new BumpersWindow();
+		bumperWindow.pack();
+		bumperWindow.setVisible(true);
+	}
+
+	public static Image loadImage(String name) throws Exception {
+		URL url = Bumpers.class.getClassLoader().getResource(name);
+		MediaTracker m = new MediaTracker(new JPanel());
+		Image img = Toolkit.getDefaultToolkit().getImage(url);
+		m.addImage(img, 0);
+		m.waitForAll();
+		return img;
+	}
+}
+

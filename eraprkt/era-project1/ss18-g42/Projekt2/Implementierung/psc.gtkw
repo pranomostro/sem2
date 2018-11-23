@@ -1,0 +1,24 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Sun Jun 10 16:00:43 2018
+[*]
+[timestart] 0
+[size] 1615 953
+[pos] -616 -326
+*-39.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.psc_tb.
+[treeopen] top.psc_tb.psc_0.
+[sst_width] 225
+[signals_width] 126
+[sst_expanded] 1
+[sst_vpaned_height] 284
+@28
+top.psc_tb.psc_0.clk
+@29
+top.psc_tb.tempexpected
+@28
+top.psc_tb.psc_0.out0
+top.psc_tb.psc_0.out1
+[pattern_trace] 1
+[pattern_trace] 0
